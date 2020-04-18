@@ -26,6 +26,10 @@ func hovered():
 	var m = get_local_mouse_position()
 	add_block(world_to_map(m), false)
 
+func draw_all():
+	clear()
+	hovered()
+
 func clear():
 	for x in range(12):
 		for y in range(12):
@@ -51,21 +55,37 @@ func add_block(position, add):
 		return
 	var tile = get_parent().get_parent().selected_tile
 	if tile:
-		var really_empty = true
-		for pos in tile.get_positions():
-			if pos[1] != -1:
-				var target = position + global.get_rotated(pos[0], Vector2(0,0))
-				if !check_empty(target):
-					return
-				if !check_really_empty(target):
-					really_empty = false
-		for pos in tile.get_positions():
-			if pos[1] != -1:
-				var target = position + global.get_rotated(pos[0], Vector2(0,0))
-				if add:
-					set_cellv(target, pos[1])
-				else:
-					if really_empty:
-						set_cellv(target, global.Blocks.SHADOW)
-					else:
+		if tile.get_positions()[0][1] == global.Blocks.EMPTY:
+			var poss = tile.get_positions()
+			if position.x >= 1 && position.x <= 10 && position.y >= 1 && position.y <= 10:
+				if !(position.x >= 4 and position.x <= 7 and position.y >= 4 and position.y <= 7):
+					for pos in poss:
+						var target = position + global.get_rotated(pos[0], Vector2(0,0))
 						set_cellv(target, global.Blocks.SHADOW2)
+					
+		else:
+			var really_empty = true
+			for pos in tile.get_positions():
+				if pos[1] != -1:
+					var target = position + global.get_rotated(pos[0], Vector2(0,0))
+					if !check_empty(target):
+						return
+					if !check_really_empty(target):
+						really_empty = false
+			for pos in tile.get_positions():
+				if pos[1] != -1:
+					var target = position + global.get_rotated(pos[0], Vector2(0,0))
+					if add:
+						set_cellv(target, pos[1])
+					else:
+						if check_really_empty(target):
+							var block
+							if pos[1] == global.Blocks.NUTRITION:
+								block = global.Blocks.NUTRITION_GREY
+							if pos[1] == global.Blocks.WATER:
+								block = global.Blocks.WATER_GREY
+							if pos[1] == global.Blocks.BANK:
+								block = global.Blocks.BANK_GREY
+							set_cellv(target, block)
+						else:
+							set_cellv(target, global.Blocks.SHADOW)

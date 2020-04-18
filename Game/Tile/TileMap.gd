@@ -44,10 +44,14 @@ func clicked():
 		if currently_laying:
 			currently_laying = false
 			preview.empty_tile_map()
+			var game = get_tree().get_root().get_node("Game")
+			game.selected_tile = null
 			load_tile(prev_tile)
+			game.find_node("Shadow").clear()
+			game.find_node("Shadow").hovered()
 		else:
-			get_parent().get_parent().cancelled()
-			$"../../..".set_selected_tile(current_tile)
+			get_parent().get_parent().get_parent().cancelled()
+			$"../../../..".set_selected_tile(current_tile)
 			preview.load_tile(current_tile)
 			empty_tile_map()
 			prev_tile = current_tile

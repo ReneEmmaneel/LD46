@@ -9,14 +9,15 @@ var preview
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var a = get_node("Tile1/TileMap")
-	var b = get_node("Tile2/TileMap")
-	var c = get_node("Tile3/TileMap")
+	var a = get_node("ColorRect/Tile1/TileMap")
+	var b = get_node("ColorRect/Tile2/TileMap")
+	var c = get_node("ColorRect/Tile3/TileMap")
 	preview = find_parent("Game").find_node("Preview")
 	nodes = [a,b,c]
 
 func shortkey(key):
 	nodes[key-1].clicked()
+	get_tree().get_root().get_node("Game").find_node("Shadow").draw_all()
 
 func cancelled():
 	for tile_obj in nodes:
@@ -24,6 +25,12 @@ func cancelled():
 			tile_obj.currently_laying = false
 			tile_obj.load_tile(tile_obj.prev_tile)
 	preview.empty_tile_map()
+
+func rotate_tile_pickers():
+	for tile_obj in nodes:
+		if !tile_obj.currently_laying:
+			if tile_obj.current_tile:
+				tile_obj.load_tile(tile_obj.current_tile)
 
 func done():
 	for tile_obj in nodes:

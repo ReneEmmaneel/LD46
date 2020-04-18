@@ -6,8 +6,22 @@ var Game
 
 #count amount blocks of given type are connected to tree_tile
 func count_block(type):
+	var nutr = [global.Blocks.NUTRITION, global.Blocks.NUTRITION_GREY]
+	var water = [global.Blocks.WATER, global.Blocks.WATER_GREY]
+	var bank = [global.Blocks.BANK, global.Blocks.BANK_GREY]
+
+	var curr_types
+
 	var count = 0
-	if type == global.Blocks.WATER or type == global.Blocks.NUTRITION:
+	if type in nutr or type in water or type in bank:
+		if type in nutr:
+			curr_types = nutr
+		elif type in water:
+			curr_types = water
+		else:
+			curr_types = bank
+
+
 		var list = []
 		var new = tree_tiles
 		var next = []
@@ -19,7 +33,7 @@ func count_block(type):
 				for dir in direction:
 					target = tile + dir
 					if !(target in list) and !(target in new) and !(target in next):
-						if get_cellv(target) == type:
+						if get_cellv(target) in curr_types:
 							count += 1
 							next.append(target)
 						elif get_cellv(target) == global.Blocks.TREE:
@@ -30,10 +44,15 @@ func count_block(type):
 			for n in next:
 				new.append(n)
 			next = []
-	elif type == global.Blocks.GOLD:
+
 		for tile in get_used_cells():
-			if get_cellv(tile) == global.Blocks.GOLD:
-				count += 1
+			type = get_cellv(tile)
+			if type != global.Blocks.TREE:
+				if tile in list:
+					set_cellv(tile, curr_types[0])
+				elif type in curr_types:
+					set_cellv(tile, curr_types[1])
+
 	return count
 
 func _ready():
@@ -50,6 +69,19 @@ func trigger_storm():
 		else:
 			set_cellv(Vector2(x,y), global.Blocks.STOP)
 
+func trigger_fire():
+	var rand = randi() % 6
+	if rand >= 3:
+		rand += 3
+	if randi() % 2:
+		for y in range(12):
+			for x in range(3):
+				set_cellv(Vector2(x+rand,y), -1)
+	else:
+		for y in range(3):
+			for x in range(12):
+				set_cellv(Vector2(x,y+rand), -1)
+
 
 
 func _process(delta):
@@ -64,6 +96,7 @@ func get_mouse_coor():
 	return coor
 
 func click():
+	print("clicked")
 	var succes = add_block(get_mouse_coor(), true)
 	if succes:
 		get_parent().get_parent().set_selected_tile(null)
@@ -71,6 +104,9 @@ func click():
 		picktile.done()
 		picktile.uncancel()
 		picktile.random_tiles_if_empty()
+	count_block(global.Blocks.NUTRITION)
+	count_block(global.Blocks.WATER)
+	count_block(global.Blocks.BANK)
 
 func check_empty(position):
 	if position.x >= 0 and position.x < grid_size and position.y >= 0 and position.y < grid_size:
@@ -83,18 +119,28 @@ func check_empty(position):
 func add_block(position, add):
 	var tile = get_parent().get_parent().selected_tile
 	if tile:
-		for pos in tile.get_positions():
-			if pos[1] != -1:
-				var target = position + global.get_rotated(pos[0], Vector2(0,0))
-				if !check_empty(target):
-					return
-		for pos in tile.get_positions():
-			if pos[1] != -1:
-				var target = position + global.get_rotated(pos[0], Vector2(0,0))
-				if add:
-					set_cellv(target, pos[1])
-				else:
-					set_cellv(target, global.Blocks.SHADOW)
-		return add
+		if tile.get_positions()[0][1] == global.Blocks.EMPTY:
+			print("a")
+			var poss = tile.get_positions()
+			if position.x >= 1 && position.x <= 10 && position.y >= 1 && position.y <= 10:
+				if !(position.x >= 4 and position.x <= 7 and position.y >= 4 and position.y <= 7):
+					for pos in poss:
+						var target = position + global.get_rotated(pos[0], Vector2(0,0))
+						set_cellv(target, -1)
+					return true
+		else:
+			for pos in tile.get_positions():
+				if pos[1] != -1:
+					var target = position + global.get_rotated(pos[0], Vector2(0,0))
+					if !check_empty(target):
+						return
+			for pos in tile.get_positions():
+				if pos[1] != -1:
+					var target = position + global.get_rotated(pos[0], Vector2(0,0))
+					if add:
+						set_cellv(target, pos[1])
+					else:
+						set_cellv(target, global.Blocks.SHADOW)
+			return add
 	return false
 

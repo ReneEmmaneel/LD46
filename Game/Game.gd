@@ -54,14 +54,14 @@ class Data:
 	var water_max = 1000
 	var water_per_block = 1
 	var water_used = -5
-	var water_use_increase_curr = 0
-	var water_use_increase_time = 10
+	var water_use_increase_curr = 20
 	var water_ps
 	
 	func update_water(delta, water_blocks):
-		water_ps = water_per_block * water_blocks + water_used
+		water_ps = water_per_block * water_blocks
 		if drought:
-			water_ps -= drought_effect
+			water_ps *= drought_effect
+		water_ps += water_used
 		water += water_ps * delta
 		if water > water_max:
 			water = water_max
@@ -77,13 +77,14 @@ class Data:
 	var nutrition_per_block = 1
 	var nutrition_used = -5
 	var nutrition_use_increase_curr = 0
-	var nutrition_use_increase_time = 10
+	var nutrition_use_increase_time = 20
 	var nutrition_ps
 	
 	func update_nutrition(delta, nutrition_blocks):
-		nutrition_ps = nutrition_per_block * nutrition_blocks + nutrition_used
+		nutrition_ps = nutrition_per_block * nutrition_blocks
 		if famine:
-			nutrition_ps -= famine_effect
+			nutrition_ps *= famine_effect
+		nutrition_ps += nutrition_used
 		nutrition += nutrition_ps * delta
 		if nutrition > nutrition_max:
 			nutrition = nutrition_max
@@ -101,17 +102,19 @@ class Data:
 	func update_gold(delta, gold_blocks):
 		gold_ps = gold_per_block * gold_blocks
 		gold += gold_ps * delta
+		if gold <= 0:
+			gold = 0 #cant go below 0
 
-	var disaster_time = 60
+	var disaster_time = 30
 	var disaster_time_max = 10
 	var disaster_progress = 0
 	var disaster_mul = 0.9
 	var famine = false
-	var famine_effect = 10
+	var famine_effect = 0.5
 	var famine_curr = 0
 	var famine_end = 30
 	var drought = false
-	var drought_effect = 10
+	var drought_effect = 0.5
 	var drought_curr = 0
 	var drought_end = 30
 
@@ -121,9 +124,6 @@ class Data:
 	
 	func choose_random_disaster():
 		next_disaster = randi() % 4
-
-	func trigger_fire():
-		pass
 
 	func trigger_disaster():
 		var return_value = next_disaster
@@ -189,7 +189,7 @@ func _process(delta):
 		data.update_water(delta, water_blocks)
 		var nutrition_blocks = $Grid/Blocks.count_block(global.Blocks.NUTRITION)
 		data.update_nutrition(delta, nutrition_blocks)
-		var gold_blocks = $Grid/Blocks.count_block(global.Blocks.GOLD)
+		var gold_blocks = $Grid/Blocks.count_block(global.Blocks.BANK)
 		data.update_gold(delta, gold_blocks)
 
 	update_progress_bars()
@@ -204,7 +204,8 @@ func _process(delta):
 		if disaster == data.DISASTER.STORM:
 			find_node("Blocks").trigger_storm()
 		if disaster == data.DISASTER.FIRE:
-			pass
+			find_node("Blocks").trigger_fire()
+			$FireSound.play()
 		
 		update_disaster_name()
 	$DisasterBar.value = data.disaster_progress
@@ -214,14 +215,14 @@ func _process(delta):
 	var water_label = $Info/col1/Water/WaterLabel
 
 	var famine = data.nutrition_used
-	if data.famine:
-		famine -= data.famine_effect
-	nutrition_label.text = "Nutrition used: " + str(famine) + "/sec"
+	nutrition_label.text = "Food used: " + str(famine) + "/sec"
 	
 	var water = data.water_used
-	if data.drought:
-		water -= data.drought_effect
 	water_label.text = "Water used: " + str(water) + "/sec"
+
+	find_node("Button").disabled = data.gold <= 300
+	find_node("Button2").disabled = data.gold <= 500
+	find_node("Button3").disabled = data.gold <= 500
 
 
 func _input(event):
@@ -238,17 +239,48 @@ func _input(event):
 
 func update_disaster_name():
 	var name
+	var tooltip
 	if data.next_disaster == data.DISASTER.FAMINE:
 		name = "Famine"
+		tooltip = "Famine will decrease food production by half"
 	if data.next_disaster == data.DISASTER.DROUGHT:
 		name = "Drought"
+		tooltip = "Drought will decrase water production by half"
 	if data.next_disaster == data.DISASTER.STORM:
 		name = "Storm"
+		tooltip = "Storm will randomely make blocks unusable"
 	if data.next_disaster == data.DISASTER.FIRE:
 		name = "Fire"
+		tooltip = "Fire will destroy a random 3 wide row or column"
 	find_node("DisasterName").set_text("Upcoming: " + name)
+	find_node("DisasterBar").hint_tooltip = tooltip
 
 #start game
 func start_game():
 	data = Data.new()
 	update_disaster_name()
+
+func add_single_tile(text_file):
+	find_node("PickTile").cancelled()
+	
+	var Tile = load("res://Game/TileObj.gd")
+	var text = load_text_file(text_file)
+	var new_tile = Tile.new(text)
+
+	set_selected_tile(new_tile)
+	find_node("Preview").load_tile(new_tile)
+
+func _on_Button_pressed():
+	if data.gold >= 300:
+		data.gold -= 500
+		add_single_tile("res://Game/empty.txt")
+
+func _on_Button2_pressed():
+	if data.gold >= 500:
+		data.gold -= 500
+		add_single_tile("res://Game/food.txt")
+
+func _on_Button3_pressed():
+	if data.gold >= 500:
+		data.gold -= 500
+		add_single_tile("res://Game/water.txt")

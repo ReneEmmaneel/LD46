@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Grid/Grid.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Game/Game.gd" type="Script" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://Fonts/Fredoka_One/FredokaOne.tres" type="DynamicFont" id=10]
 [ext_resource path="res://tileset/blocks/NutrionBlock.png" type="Texture" id=11]
 [ext_resource path="res://tileset/blocks/WaterBlock.png" type="Texture" id=12]
+[ext_resource path="res://Sound/Fire.wav" type="AudioStream" id=13]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.286275, 0.654902, 0.0470588, 1 )
@@ -26,6 +27,7 @@ bg_color = Color( 0.0627451, 0.231373, 0.894118, 1 )
 script = ExtResource( 2 )
 
 [node name="Grid" parent="." instance=ExtResource( 1 )]
+position = Vector2( 16, 126 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
@@ -33,10 +35,11 @@ current = true
 zoom = Vector2( 0.9, 0.9 )
 
 [node name="PickTile" parent="." instance=ExtResource( 3 )]
-position = Vector2( 453.035, 278.697 )
+position = Vector2( 402.234, 367.919 )
 
 [node name="Upperbar" type="ColorRect" parent="."]
 margin_left = 10.0
+margin_top = 15.0
 margin_right = 918.0
 margin_bottom = 120.0
 color = Color( 1, 1, 1, 0.145098 )
@@ -53,10 +56,10 @@ __meta__ = {
 }
 
 [node name="NutritionProgressBar" type="ProgressBar" parent="Upperbar"]
-margin_left = 134.673
-margin_top = 6.72185
-margin_right = 904.673
-margin_bottom = 52.7218
+margin_left = 135.0
+margin_top = 7.0
+margin_right = 903.0
+margin_bottom = 47.0
 custom_styles/fg = SubResource( 1 )
 step = 1.0
 value = 50.0
@@ -68,8 +71,8 @@ __meta__ = {
 
 [node name="Label" type="Label" parent="Upperbar/NutritionProgressBar"]
 margin_left = 2.0
-margin_right = 762.0
-margin_bottom = 46.0
+margin_right = 768.0
+margin_bottom = 39.0
 rect_pivot_offset = Vector2( 398.141, 22.5 )
 custom_fonts/font = SubResource( 2 )
 text = "500/ 2000"
@@ -81,11 +84,11 @@ __meta__ = {
 
 [node name="Name" type="Label" parent="Upperbar/NutritionProgressBar"]
 margin_left = 2.0
-margin_right = 762.0
+margin_right = 765.0
 margin_bottom = 46.0
 rect_pivot_offset = Vector2( 398.141, 22.5 )
 custom_fonts/font = SubResource( 2 )
-text = "Nutrition"
+text = "Food"
 align = 1
 valign = 1
 __meta__ = {
@@ -93,10 +96,10 @@ __meta__ = {
 }
 
 [node name="WaterProgressBar" type="ProgressBar" parent="Upperbar"]
-margin_left = 135.337
-margin_top = 62.4492
-margin_right = 905.337
-margin_bottom = 108.449
+margin_left = 135.0
+margin_top = 57.0
+margin_right = 902.0
+margin_bottom = 97.0
 custom_styles/fg = SubResource( 3 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 step = 1.0
@@ -109,8 +112,8 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="Upperbar/WaterProgressBar"]
-margin_right = 762.0
-margin_bottom = 45.0
+margin_right = 763.0
+margin_bottom = 37.0
 rect_pivot_offset = Vector2( 398.141, 22.5 )
 custom_fonts/font = SubResource( 2 )
 text = "500/ 2000"
@@ -140,23 +143,26 @@ format = 1
 script = ExtResource( 7 )
 
 [node name="Info" type="ColorRect" parent="."]
-margin_left = 455.0
-margin_top = 143.0
-margin_right = 880.0
-margin_bottom = 283.0
+margin_left = 403.0
+margin_top = 121.0
+margin_right = 923.0
+margin_bottom = 309.0
 color = Color( 1, 1, 1, 0.145098 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="col1" type="ReferenceRect" parent="Info"]
-margin_right = 207.0
-margin_bottom = 142.0
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 260.0
+margin_bottom = 202.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Gold" type="ReferenceRect" parent="Info/col1"]
+margin_top = 10.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -179,7 +185,8 @@ __meta__ = {
 }
 
 [node name="Nutrition" type="ReferenceRect" parent="Info/col1"]
-margin_top = 50.0
+margin_top = 60.0
+margin_bottom = 50.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -201,10 +208,10 @@ __meta__ = {
 }
 
 [node name="Water" type="ReferenceRect" parent="Info/col1"]
-margin_left = 0.397217
-margin_top = 100.0
-margin_right = 0.397217
-margin_bottom = 96.4741
+margin_left = 0.397
+margin_top = 114.0
+margin_right = 0.397
+margin_bottom = 164.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -226,29 +233,81 @@ __meta__ = {
 }
 
 [node name="col2" type="ReferenceRect" parent="Info"]
-margin_left = 209.0
-margin_top = 3.0
-margin_right = 424.0
-margin_bottom = 142.0
+margin_left = 260.0
+margin_top = 4.0
+margin_right = 513.0
+margin_bottom = 178.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="VBoxContainer" parent="Info/col2"]
+margin_left = -26.0
+margin_top = -1.0
+margin_right = 257.0
+margin_bottom = 180.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="Info/col2/HBoxContainer"]
+margin_right = 283.0
+margin_bottom = 57.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 10 )
+text = "Delete 3x3 | Cost 300 Gold"
+
+[node name="Button2" type="Button" parent="Info/col2/HBoxContainer"]
+margin_top = 61.0
+margin_right = 283.0
+margin_bottom = 118.0
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 10 )
+text = "Add 1 Food source | Cost 500 Gold"
+
+[node name="Button3" type="Button" parent="Info/col2/HBoxContainer"]
+margin_top = 122.0
+margin_right = 283.0
+margin_bottom = 181.0
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 10 )
+text = "Add 1 Water source | Cost 500 Gold"
 
 [node name="DisasterBar" type="ProgressBar" parent="."]
-margin_left = 455.285
-margin_top = 291.57
-margin_right = 879.285
-margin_bottom = 332.57
-step = 1.0
+margin_left = 404.45
+margin_top = 317.221
+margin_right = 921.45
+margin_bottom = 363.221
+hint_tooltip = "Fire destroys a random 3 wide row or column"
+step = 0.05
 percent_visible = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="DisasterName" type="Label" parent="DisasterBar"]
-margin_right = 422.0
-margin_bottom = 39.0
+margin_right = 520.0
+margin_bottom = 46.0
 custom_fonts/font = ExtResource( 10 )
-text = "Upcoming: Unkown"
+text = "Upcoming: Unknown"
 align = 1
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DisasterBar"]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FireSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 13 )
+[connection signal="pressed" from="Info/col2/HBoxContainer/Button" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="Info/col2/HBoxContainer/Button2" to="." method="_on_Button2_pressed"]
+[connection signal="pressed" from="Info/col2/HBoxContainer/Button3" to="." method="_on_Button3_pressed"]
