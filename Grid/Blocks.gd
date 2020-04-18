@@ -6,33 +6,51 @@ var Game
 
 #count amount blocks of given type are connected to tree_tile
 func count_block(type):
-	var list = []
-	var new = tree_tiles
-	var next = []
 	var count = 0
-	var direction = [Vector2(1,0), Vector2(0,1), Vector2(-1,0), Vector2(0,-1)]
-
-	var target
-	while new.size() > 0:
-		for tile in new:
-			for dir in direction:
-				target = tile + dir
-				if !(target in list) and !(target in new) and !(target in next):
-					if get_cellv(target) == type:
-						count += 1
-						next.append(target)
-					elif get_cellv(target) == global.Blocks.TREE:
-						next.append(target)
-		for n in new:
-			list.append(n)
-		new = []
-		for n in next:
-			new.append(n)
-		next = []
+	if type == global.Blocks.WATER or type == global.Blocks.NUTRITION:
+		var list = []
+		var new = tree_tiles
+		var next = []
+		var direction = [Vector2(1,0), Vector2(0,1), Vector2(-1,0), Vector2(0,-1)]
+	
+		var target
+		while new.size() > 0:
+			for tile in new:
+				for dir in direction:
+					target = tile + dir
+					if !(target in list) and !(target in new) and !(target in next):
+						if get_cellv(target) == type:
+							count += 1
+							next.append(target)
+						elif get_cellv(target) == global.Blocks.TREE:
+							next.append(target)
+			for n in new:
+				list.append(n)
+			new = []
+			for n in next:
+				new.append(n)
+			next = []
+	elif type == global.Blocks.GOLD:
+		for tile in get_used_cells():
+			if get_cellv(tile) == global.Blocks.GOLD:
+				count += 1
 	return count
 
 func _ready():
 	pass
+
+
+func trigger_storm():
+	for i in range(5):
+		var x = randi() % grid_size
+		var y = randi() % grid_size
+		var vec = Vector2(x,y)
+		if vec in tree_tiles:
+			i -= 1
+		else:
+			set_cellv(Vector2(x,y), global.Blocks.STOP)
+
+
 
 func _process(delta):
 	if Input.is_action_just_pressed("click"):
@@ -67,12 +85,12 @@ func add_block(position, add):
 	if tile:
 		for pos in tile.get_positions():
 			if pos[1] != -1:
-				var target = position + pos[0]
+				var target = position + global.get_rotated(pos[0], Vector2(0,0))
 				if !check_empty(target):
 					return
 		for pos in tile.get_positions():
 			if pos[1] != -1:
-				var target = position + pos[0]
+				var target = position + global.get_rotated(pos[0], Vector2(0,0))
 				if add:
 					set_cellv(target, pos[1])
 				else:

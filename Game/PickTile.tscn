@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Tile1.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Game/Tile/Tile3.tscn" type="PackedScene" id=2]
@@ -6,6 +6,8 @@
 [ext_resource path="res://Game/PickTile.gd" type="Script" id=4]
 [ext_resource path="res://Fonts/Fredoka_One/FredokaOne.tres" type="DynamicFont" id=5]
 [ext_resource path="res://tileset/misc/redraw.png" type="Texture" id=6]
+[ext_resource path="res://Game/Redraw.gd" type="Script" id=7]
+[ext_resource path="res://tileset/misc/gold.png" type="Texture" id=8]
 
 [node name="PickTile" type="Node2D"]
 script = ExtResource( 4 )
@@ -74,13 +76,30 @@ margin_right = 408.757
 margin_bottom = 212.957
 rect_pivot_offset = Vector2( 53.4244, 7 )
 custom_fonts/font = ExtResource( 5 )
-text = "(R)"
+text = "(Q)"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Sprite" type="Sprite" parent="."]
-position = Vector2( 361.851, 140.545 )
+[node name="Redraw" type="Sprite" parent="."]
+position = Vector2( 361.851, 115 )
 scale = Vector2( 2, 2 )
 texture = ExtResource( 6 )
+script = ExtResource( 7 )
+
+[node name="Gold" type="Sprite" parent="."]
+position = Vector2( 374.471, 167.512 )
+scale = Vector2( 1.5, 1.5 )
+texture = ExtResource( 8 )
+
+[node name="Label" type="Label" parent="."]
+margin_left = 327.516
+margin_top = 162.379
+margin_right = 372.516
+margin_bottom = 182.379
+custom_fonts/font = ExtResource( 5 )
+text = "-250"
+__meta__ = {
+"_edit_use_anchors_": false
+}

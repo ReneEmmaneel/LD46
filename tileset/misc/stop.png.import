@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/redraw.png-e0e260eed99938493941e81b9b1b3fe1.stex"
+path="res://.import/stop.png-8286a27e9eb53554ec6871524f22537d.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://tileset/misc/redraw.png"
-dest_files=[ "res://.import/redraw.png-e0e260eed99938493941e81b9b1b3fe1.stex" ]
+source_file="res://tileset/misc/stop.png"
+dest_files=[ "res://.import/stop.png-8286a27e9eb53554ec6871524f22537d.stex" ]
 
 [params]
 

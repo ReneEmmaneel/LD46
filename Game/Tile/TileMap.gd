@@ -23,7 +23,7 @@ func load_tile(tile):
 	current_tile = tile
 	empty_tile_map()
 	for pos in tile.get_positions():
-		set_cellv(pos[0] + Vector2(1,1), pos[1])
+		set_cellv(global.get_rotated(pos[0], Vector2(0,0)) + Vector2(1,1), pos[1])
 	currently_laying = false
 
 func _ready():

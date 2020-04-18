@@ -12,7 +12,7 @@ func load_tile(tile):
 		return
 	empty_tile_map()
 	for pos in tile.get_positions():
-		set_cellv(pos[0] + Vector2(1,1), pos[1])
+		set_cellv(global.get_rotated(pos[0], Vector2(0,0)) + Vector2(1,1), pos[1])
 
 func _ready():
 	pass # Replace with function body.

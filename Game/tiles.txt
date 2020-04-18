@@ -1,7 +1,15 @@
-120
-xx1
-xx1
+1x2
+xxx
+0xx
 
-1xx
+xxx
+xRR
+xRR
+
+xxx
 111
-xx1
+222
+
+010
+010
+010

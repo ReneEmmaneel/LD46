@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Grid/Grid.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Game/Game.gd" type="Script" id=2]
@@ -10,6 +10,8 @@
 [ext_resource path="res://tileset/blocks/TileSet.tres" type="TileSet" id=8]
 [ext_resource path="res://tileset/misc/gold.png" type="Texture" id=9]
 [ext_resource path="res://Fonts/Fredoka_One/FredokaOne.tres" type="DynamicFont" id=10]
+[ext_resource path="res://tileset/blocks/NutrionBlock.png" type="Texture" id=11]
+[ext_resource path="res://tileset/blocks/WaterBlock.png" type="Texture" id=12]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.286275, 0.654902, 0.0470588, 1 )
@@ -138,33 +140,115 @@ format = 1
 script = ExtResource( 7 )
 
 [node name="Info" type="ColorRect" parent="."]
-margin_left = 455.139
-margin_top = 143.455
-margin_right = 880.139
-margin_bottom = 332.455
+margin_left = 455.0
+margin_top = 143.0
+margin_right = 880.0
+margin_bottom = 283.0
 color = Color( 1, 1, 1, 0.145098 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ReferenceRect" type="ReferenceRect" parent="Info"]
-margin_left = 12.0
-margin_top = 10.0
-margin_right = 208.0
-margin_bottom = 53.0
+[node name="col1" type="ReferenceRect" parent="Info"]
+margin_right = 207.0
+margin_bottom = 142.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Sprite" type="Sprite" parent="Info/ReferenceRect"]
-position = Vector2( 20, 20 )
+[node name="Gold" type="ReferenceRect" parent="Info/col1"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GoldSprite" type="Sprite" parent="Info/col1/Gold"]
+position = Vector2( 16, 16 )
 scale = Vector2( 2, 2 )
 texture = ExtResource( 9 )
 
-[node name="Label" type="Label" parent="Info/ReferenceRect"]
-margin_left = 44.1505
-margin_top = 11.698
-margin_right = 187.15
-margin_bottom = 31.698
+[node name="GoldLabel" type="Label" parent="Info/col1/Gold"]
+margin_left = 32.0
+margin_right = 208.0
+margin_bottom = 32.0
 custom_fonts/font = ExtResource( 10 )
 text = "Gold 1000 (10/sec)"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Nutrition" type="ReferenceRect" parent="Info/col1"]
+margin_top = 50.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NutritionSprite" type="Sprite" parent="Info/col1/Nutrition"]
+position = Vector2( 16, 16 )
+texture = ExtResource( 11 )
+
+[node name="NutritionLabel" type="Label" parent="Info/col1/Nutrition"]
+margin_left = 32.0
+margin_right = 208.0
+margin_bottom = 32.0
+custom_fonts/font = ExtResource( 10 )
+text = "Nutrition used -4/sec"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Water" type="ReferenceRect" parent="Info/col1"]
+margin_left = 0.397217
+margin_top = 100.0
+margin_right = 0.397217
+margin_bottom = 96.4741
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WaterSprite" type="Sprite" parent="Info/col1/Water"]
+position = Vector2( 16, 16 )
+texture = ExtResource( 12 )
+
+[node name="WaterLabel" type="Label" parent="Info/col1/Water"]
+margin_left = 32.0
+margin_right = 208.0
+margin_bottom = 32.0
+custom_fonts/font = ExtResource( 10 )
+text = "Water used -4/sec"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="col2" type="ReferenceRect" parent="Info"]
+margin_left = 209.0
+margin_top = 3.0
+margin_right = 424.0
+margin_bottom = 142.0
+
+[node name="DisasterBar" type="ProgressBar" parent="."]
+margin_left = 455.285
+margin_top = 291.57
+margin_right = 879.285
+margin_bottom = 332.57
+step = 1.0
+percent_visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DisasterName" type="Label" parent="DisasterBar"]
+margin_right = 422.0
+margin_bottom = 39.0
+custom_fonts/font = ExtResource( 10 )
+text = "Upcoming: Unkown"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}

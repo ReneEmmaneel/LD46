@@ -37,21 +37,35 @@ func check_empty(position):
 	else:
 		return false
 
+
+func check_really_empty(position):
+	if position.x >= 0 and position.x < grid_size and position.y >= 0 and position.y < grid_size:
+		var type = $"../Blocks".get_cellv(position)
+		return (type == global.Blocks.SHADOW) or (type == -1 and !(position in $"../Blocks".tree_tiles))
+	else:
+		return false
+
 #second argument is wheter to add it or only a shadow version
 func add_block(position, add):
 	if !has_selection():
 		return
 	var tile = get_parent().get_parent().selected_tile
 	if tile:
+		var really_empty = true
 		for pos in tile.get_positions():
 			if pos[1] != -1:
-				var target = position + pos[0]
+				var target = position + global.get_rotated(pos[0], Vector2(0,0))
 				if !check_empty(target):
 					return
+				if !check_really_empty(target):
+					really_empty = false
 		for pos in tile.get_positions():
 			if pos[1] != -1:
-				var target = position + pos[0]
+				var target = position + global.get_rotated(pos[0], Vector2(0,0))
 				if add:
 					set_cellv(target, pos[1])
 				else:
-					set_cellv(target, global.Blocks.SHADOW)
+					if really_empty:
+						set_cellv(target, global.Blocks.SHADOW)
+					else:
+						set_cellv(target, global.Blocks.SHADOW2)

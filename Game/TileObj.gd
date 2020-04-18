@@ -30,6 +30,7 @@ func get_positions():
 
 func _init(positions_text):
 	self.positions = self.text_to_positions(positions_text)
+	""""""
 
 func _ready():
 	pass # Replace with function body.
