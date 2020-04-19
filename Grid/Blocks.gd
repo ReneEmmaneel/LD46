@@ -72,21 +72,34 @@ func trigger_storm():
 func trigger_fire():
 	var rand = randi() % 6
 	if rand >= 3:
-		rand += 3
+		rand += 4
 	if randi() % 2:
 		for y in range(12):
 			for x in range(3):
-				set_cellv(Vector2(x+rand,y), -1)
+				set_cellv(Vector2(x+rand,y), global.Blocks.FIRE)
 	else:
 		for y in range(3):
 			for x in range(12):
-				set_cellv(Vector2(x,y+rand), -1)
+				set_cellv(Vector2(x,y+rand), global.Blocks.FIRE)
+
+	var t = Timer.new()
+	t.set_wait_time(1.5)
+	t.set_one_shot(true)
+	self.add_child(t)
+	t.start()
+	yield(t, "timeout")
+
+	for x in range(12):
+		for y in range(12):
+			if get_cellv(Vector2(x,y)) ==  global.Blocks.FIRE:
+				set_cellv(Vector2(x,y), -1)
 
 
 
 func _process(delta):
-	if Input.is_action_just_pressed("click"):
-		click()
+	if !global.paused:
+		if Input.is_action_just_pressed("click"):
+			click()
 
 func get_mouse_coor():
 	var mouse_pos = get_global_mouse_position()
@@ -96,22 +109,29 @@ func get_mouse_coor():
 	return coor
 
 func click():
-	print("clicked")
 	var succes = add_block(get_mouse_coor(), true)
+	var Game = get_parent().get_parent()
 	if succes:
-		get_parent().get_parent().set_selected_tile(null)
-		var picktile = get_parent().get_parent().find_node("PickTile")
+		Game.get_node("Place").play()
+		Game.set_selected_tile(null)
+		var picktile = Game.find_node("PickTile")
 		picktile.done()
 		picktile.uncancel()
 		picktile.random_tiles_if_empty()
+	else:
+		if check_on_map(get_mouse_coor()):
+			Game.get_node("Error").play()
 	count_block(global.Blocks.NUTRITION)
 	count_block(global.Blocks.WATER)
 	count_block(global.Blocks.BANK)
 
+func check_on_map(position):
+	return position.x >= 0 and position.x < grid_size and position.y >= 0 and position.y < grid_size
+
 func check_empty(position):
-	if position.x >= 0 and position.x < grid_size and position.y >= 0 and position.y < grid_size:
+	if check_on_map(position):
 		var type = get_cellv(position)
-		return (type == global.Blocks.SHADOW) or (type == -1 and !(position in tree_tiles))
+		return (type == global.Blocks.SHADOW) or (type == -1 and !(position in tree_tiles)) or (type == global.Blocks.FIRE)
 	else:
 		return false
 
@@ -120,7 +140,6 @@ func add_block(position, add):
 	var tile = get_parent().get_parent().selected_tile
 	if tile:
 		if tile.get_positions()[0][1] == global.Blocks.EMPTY:
-			print("a")
 			var poss = tile.get_positions()
 			if position.x >= 1 && position.x <= 10 && position.y >= 1 && position.y <= 10:
 				if !(position.x >= 4 and position.x <= 7 and position.y >= 4 and position.y <= 7):

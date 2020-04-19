@@ -3,6 +3,7 @@ extends Node
 var positions
 var start = -1
 var rotation = 0
+var cost = 0
 
 func get_random_tile():
 	var Game = find_parent("Game")
@@ -28,7 +29,8 @@ func text_to_positions(positions_text):
 func get_positions():
 	return positions
 
-func _init(positions_text):
+func _init(positions_text, cost = 0):
+	self.cost = cost
 	self.positions = self.text_to_positions(positions_text)
 
 func _ready():

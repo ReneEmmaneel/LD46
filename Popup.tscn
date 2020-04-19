@@ -1,0 +1,75 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Popup.gd" type="Script" id=1]
+[ext_resource path="res://tileset/misc/arrow2.png" type="Texture" id=2]
+[ext_resource path="res://Fonts/Fredoka_One/FredokaOneBig.tres" type="DynamicFont" id=3]
+
+[node name="Popup" type="Popup"]
+margin_right = 531.0
+margin_bottom = 244.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Arrow" type="Control" parent="ColorRect"]
+anchor_left = 0.85
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_scale = Vector2( 3, 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite" type="Sprite" parent="ColorRect/Arrow"]
+scale = Vector2( 0.1, 0.1 )
+texture = ExtResource( 2 )
+centered = false
+
+[node name="ColorRect" type="ColorRect" parent="ColorRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -8.0
+color = Color( 0.560784, 0.517647, 0.517647, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="ColorRect/ColorRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "You shouldn't be able to see this message! Do not look, it is embarrasing"
+align = 1
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="ColorRect/ColorRect"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_bottom = -5.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "(click anywhere to continue)"
+align = 1
+valign = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="popup_hide" from="." to="." method="_on_Popup_popup_hide"]

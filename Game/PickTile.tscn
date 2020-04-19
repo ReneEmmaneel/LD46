@@ -15,7 +15,7 @@ script = ExtResource( 4 )
 [node name="ColorRect" type="ColorRect" parent="."]
 margin_right = 520.0
 margin_bottom = 168.0
-color = Color( 0, 0, 0, 0.184314 )
+color = Color( 0, 0, 0, 0 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -84,12 +84,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Redraw" type="Sprite" parent="ColorRect"]
-position = Vector2( 483.204, 77.4373 )
-scale = Vector2( 2, 2 )
-texture = ExtResource( 6 )
-script = ExtResource( 7 )
-
 [node name="Gold" type="Sprite" parent="ColorRect"]
 position = Vector2( 502.81, 125.946 )
 scale = Vector2( 1.5, 1.5 )
@@ -105,3 +99,19 @@ text = "-250"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="ReferenceRect" type="ReferenceRect" parent="ColorRect"]
+margin_left = 451.0
+margin_top = 45.0
+margin_right = 515.0
+margin_bottom = 109.0
+mouse_default_cursor_shape = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Redraw" type="Sprite" parent="ColorRect/ReferenceRect"]
+scale = Vector2( 2, 2 )
+texture = ExtResource( 6 )
+centered = false
+script = ExtResource( 7 )

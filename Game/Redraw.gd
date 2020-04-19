@@ -11,11 +11,13 @@ func _ready():
 	pass # Replace with function body.
 
 func _process(delta):
-	if Input.is_action_just_pressed("click"):
-		mouse_click()
+	if !global.paused:
+		if Input.is_action_just_pressed("click"):
+			mouse_click()
 
 func mouse_click():
 	var m = get_local_mouse_position()
-	var size = 16
-	if m.x >= -size and m.x < size and m.y >= -size and m.y < size:
+	print(m)
+	var size = 32
+	if m.x >= 0 and m.x < size and m.y >= 0 and m.y < size:
 		find_parent("Game").redraw()

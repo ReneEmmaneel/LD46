@@ -15,12 +15,13 @@ func get_mouse_coor():
 	var coor = world_to_map(Vector2(mx, my) - get_parent().get_position())
 
 func _input(event):
-	if event is InputEventMouseMotion:
-		clear()
-		hovered()
-	if event is InputEventMouseButton:
-		if !has_selection():
+	if !global.paused:
+		if event is InputEventMouseMotion:
 			clear()
+			hovered()
+		if event is InputEventMouseButton:
+			if !has_selection():
+				clear()
 
 func hovered():
 	var m = get_local_mouse_position()

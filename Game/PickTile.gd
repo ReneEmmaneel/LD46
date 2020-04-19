@@ -20,6 +20,9 @@ func shortkey(key):
 	get_tree().get_root().get_node("Game").find_node("Shadow").draw_all()
 
 func cancelled():
+	var Game = get_tree().get_root().get_node("Game")
+	if Game.selected_tile:
+		Game.data.gold += Game.selected_tile.cost
 	for tile_obj in nodes:
 		if tile_obj.currently_laying:
 			tile_obj.currently_laying = false

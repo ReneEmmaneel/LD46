@@ -34,6 +34,7 @@ func _ready():
 
 	pass # Replace with function body.
 
+
 func load_text_file(path):
 	var f = File.new()
 	var err = f.open(path, File.READ)
@@ -49,19 +50,24 @@ func load_text_file(path):
 var data
 
 class Data:
+	var time = 0
+
+
 	## WATER
 	var water = 500
 	var water_max = 1000
 	var water_per_block = 1
-	var water_used = -5
-	var water_use_increase_curr = 20
+	var water_used = -15
+	var water_use_increase_curr = 00
+	var water_use_increase_time = 15
 	var water_ps
 	
 	func update_water(delta, water_blocks):
 		water_ps = water_per_block * water_blocks
 		if drought:
-			water_ps *= drought_effect
-		water_ps += water_used
+			water_ps += water_used * drought_effect
+		else:
+			water_ps += water_used
 		water += water_ps * delta
 		if water > water_max:
 			water = water_max
@@ -75,16 +81,18 @@ class Data:
 	var nutrition = 500
 	var nutrition_max = 1000
 	var nutrition_per_block = 1
-	var nutrition_used = -5
+	var nutrition_used = -15
 	var nutrition_use_increase_curr = 0
-	var nutrition_use_increase_time = 20
+	var nutrition_use_increase_time = 15
 	var nutrition_ps
 	
 	func update_nutrition(delta, nutrition_blocks):
 		nutrition_ps = nutrition_per_block * nutrition_blocks
 		if famine:
-			nutrition_ps *= famine_effect
-		nutrition_ps += nutrition_used
+			nutrition_ps += nutrition_used * famine_effect
+		else:
+			nutrition_ps += nutrition_used
+
 		nutrition += nutrition_ps * delta
 		if nutrition > nutrition_max:
 			nutrition = nutrition_max
@@ -95,7 +103,7 @@ class Data:
 			nutrition_used -= 1
 
 	## GOLD
-	var gold = 0
+	var gold = 0 #TODO REMOVE
 	var gold_per_block = 1
 	var gold_ps
 	
@@ -110,13 +118,14 @@ class Data:
 	var disaster_progress = 0
 	var disaster_mul = 0.9
 	var famine = false
-	var famine_effect = 0.5
+	var famine_effect = 2
 	var famine_curr = 0
-	var famine_end = 30
+	var famine_end = 15
 	var drought = false
-	var drought_effect = 0.5
+	var drought_effect = 2
 	var drought_curr = 0
-	var drought_end = 30
+	var drought_end = 15
+	var prev_disaster = null
 
 	enum DISASTER {DROUGHT, FAMINE, STORM, FIRE}
 
@@ -124,6 +133,8 @@ class Data:
 	
 	func choose_random_disaster():
 		next_disaster = randi() % 4
+		if next_disaster == prev_disaster:
+			choose_random_disaster()
 
 	func trigger_disaster():
 		var return_value = next_disaster
@@ -134,23 +145,31 @@ class Data:
 			famine = true
 			famine_curr = 0
 
+		prev_disaster = next_disaster
 		choose_random_disaster()
 
 		return return_value
 
-	func progress_disaster(delta):
-		disaster_progress += delta
-
+	func cont_famine(delta):
 		if famine:
 			famine_curr += delta
 			if famine_curr > famine_end:
 				famine_curr = 0
 				famine = false
+				return true
+		return false
+
+	func cont_drought(delta):
 		if drought:
 			drought_curr += delta
 			if drought_curr > drought_end:
 				drought_curr = 0
 				drought = false
+				return true
+		return false
+
+	func progress_disaster(delta):
+		disaster_progress += delta
 
 		if disaster_progress > disaster_time:
 			disaster_progress = 0
@@ -180,10 +199,38 @@ func update_progress_bars():
 
 func redraw():
 	if data.gold > global.redraw_cost:
+		selected_tile = null
 		data.gold -= global.redraw_cost
 		find_node("PickTile").choose_random_tiles()
 
+func animate_nutrition():
+	find_node("NutrAnim").play("alarm")
+
+func stop_animate_nutrition():
+	find_node("NutrAnim").stop()
+
+func animate_water():
+	find_node("WaterAnim").play("drought")
+
+func stop_animate_water():
+	find_node("WaterAnim").stop()
+
 func _process(delta):
+	if data.nutrition < 200 or data.water < 200:
+		if !$Alarm.playing:
+			$Alarm.play()
+	else:
+		$Alarm.stop()
+	if global.paused:
+		return
+	data.time += delta
+	find_node("Time").set_text("%01.0d:%02.0d" % [int(data.time / 60), int(data.time) % 60])
+
+	if data.water <= 0 || data.nutrition <= 0:
+		global.time = data.time
+		global.first_time = false
+		get_tree().change_scene("res://Menu/EndScreen.tscn")
+
 	if data:
 		var water_blocks = $Grid/Blocks.count_block(global.Blocks.WATER)
 		data.update_water(delta, water_blocks)
@@ -199,53 +246,76 @@ func _process(delta):
 		selected_tile = null
 		find_node("Shadow").clear()
 
+	if data.cont_famine(delta):
+		stop_animate_nutrition()
+
+	if data.cont_drought(delta):
+		stop_animate_water()
+
 	var disaster = data.progress_disaster(delta)
 	if disaster != null:
 		if disaster == data.DISASTER.STORM:
 			find_node("Blocks").trigger_storm()
+			$StormSound.play()
 		if disaster == data.DISASTER.FIRE:
 			find_node("Blocks").trigger_fire()
 			$FireSound.play()
+		if disaster == data.DISASTER.FAMINE:
+			animate_nutrition()
+			$Famine.play()
+		if disaster == data.DISASTER.DROUGHT:
+			$Famine.play()
+			animate_water()
 		
 		update_disaster_name()
 	$DisasterBar.value = data.disaster_progress
 	$DisasterBar.max_value = data.disaster_time
 
-	var nutrition_label = $Info/col1/Nutrition/NutritionLabel
-	var water_label = $Info/col1/Water/WaterLabel
+	var nutrition_label = find_node("NutritionLabel")
+	var water_label = find_node("WaterLabel")
 
 	var famine = data.nutrition_used
-	nutrition_label.text = "Food used: " + str(famine) + "/sec"
+	if data.famine:
+		famine *= 2
+	nutrition_label.text = "Food consumed: " + str(famine) + "/sec"
 	
 	var water = data.water_used
-	water_label.text = "Water used: " + str(water) + "/sec"
+	if data.drought:
+		water *= 2
+	water_label.text = "Water consumed: " + str(water) + "/sec"
 
-	find_node("Button").disabled = data.gold <= 300
-	find_node("Button2").disabled = data.gold <= 500
-	find_node("Button3").disabled = data.gold <= 500
+	find_node("Button").disabled = data.gold < 300
+	find_node("Button2").disabled = data.gold < 500
+	find_node("Button3").disabled = data.gold < 500
 
 
 func _input(event):
-	if event.is_action_pressed("1"):
-		find_node("PickTile").shortkey(1)
-	elif event.is_action_pressed("2"):
-		find_node("PickTile").shortkey(2)
-	elif event.is_action_pressed("3"):
-		find_node("PickTile").shortkey(3)
-	elif event.is_action_pressed("r"):
-		global.rotate()
-	elif event.is_action_pressed("q"):
-		redraw()
+	if !global.paused:
+		if event.is_action_pressed("1"):
+			find_node("PickTile").shortkey(1)
+		elif event.is_action_pressed("2"):
+			find_node("PickTile").shortkey(2)
+		elif event.is_action_pressed("3"):
+			find_node("PickTile").shortkey(3)
+		elif event.is_action_pressed("r"):
+			global.rotate()
+		elif event.is_action_pressed("q"):
+			redraw()
+		elif event.is_action_pressed("p"):#debug
+			if OS.is_debug_build():
+				data.water -= 100
+				data.nutrition -= 100
+				data.disaster_progress += 100
 
 func update_disaster_name():
 	var name
 	var tooltip
 	if data.next_disaster == data.DISASTER.FAMINE:
 		name = "Famine"
-		tooltip = "Famine will decrease food production by half"
+		tooltip = "Famine will increase food consumption by two"
 	if data.next_disaster == data.DISASTER.DROUGHT:
 		name = "Drought"
-		tooltip = "Drought will decrase water production by half"
+		tooltip = "Drought will increase water consumption by two"
 	if data.next_disaster == data.DISASTER.STORM:
 		name = "Storm"
 		tooltip = "Storm will randomely make blocks unusable"
@@ -260,27 +330,51 @@ func start_game():
 	data = Data.new()
 	update_disaster_name()
 
-func add_single_tile(text_file):
+	if global.first_time:
+		tutorial()
+
+###TUTORIAL
+
+var tutorial_list
+
+func tutorial():
+	tutorial_list = [$Popup1, $Popup2, $Popup3, $Popup5, $Popup4, $Popup6]
+	global.paused = true
+	if global.first_time:
+		popup_gone()
+
+func popup_gone():
+	print(global.paused)
+	if tutorial_list.size() > 0:
+		tutorial_list[0].popup()
+		tutorial_list.remove(0)
+	else:
+		global.paused = false
+
+func add_single_tile(text_file, cost = 0):
 	find_node("PickTile").cancelled()
 	
 	var Tile = load("res://Game/TileObj.gd")
 	var text = load_text_file(text_file)
-	var new_tile = Tile.new(text)
+	var new_tile = Tile.new(text, cost)
 
 	set_selected_tile(new_tile)
 	find_node("Preview").load_tile(new_tile)
 
 func _on_Button_pressed():
 	if data.gold >= 300:
-		data.gold -= 500
-		add_single_tile("res://Game/empty.txt")
+		data.gold -= 300
+		add_single_tile("res://Game/empty.txt", 300)
 
 func _on_Button2_pressed():
 	if data.gold >= 500:
 		data.gold -= 500
-		add_single_tile("res://Game/food.txt")
+		add_single_tile("res://Game/food.txt", 500)
 
 func _on_Button3_pressed():
 	if data.gold >= 500:
 		data.gold -= 500
-		add_single_tile("res://Game/water.txt")
+		add_single_tile("res://Game/water.txt", 500)
+
+func _on_TextureButton_pressed():
+	global.toggle_music()

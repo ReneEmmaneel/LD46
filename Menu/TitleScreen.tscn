@@ -1,0 +1,80 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Menu/TitleScreen.gd" type="Script" id=1]
+[ext_resource path="res://Fonts/Fredoka_One/FredokaOneBig.tres" type="DynamicFont" id=2]
+[ext_resource path="res://Fonts/Fredoka_One/FredokaOne-Regular.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://Menu/MusicButton.tscn" type="PackedScene" id=4]
+[ext_resource path="res://tileset/blocks/TileSet.tres" type="TileSet" id=5]
+[ext_resource path="res://Menu/TileMap.gd" type="Script" id=6]
+
+[sub_resource type="DynamicFont" id=1]
+size = 45
+font_data = ExtResource( 3 )
+
+[node name="TitleScreen" type="Control"]
+margin_right = 1024.0
+margin_bottom = 600.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 40.0
+margin_bottom = 40.0
+color = Color( 0.560784, 0.517647, 0.517647, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TileMap" type="TileMap" parent="."]
+scale = Vector2( 2, 2 )
+tile_set = ExtResource( 5 )
+cell_size = Vector2( 32, 32 )
+format = 1
+script = ExtResource( 6 )
+
+[node name="Control" type="Control" parent="."]
+anchor_top = 0.2
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 250.0
+margin_right = -250.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MusicButton" parent="Control" instance=ExtResource( 4 )]
+anchor_top = 0.7
+anchor_bottom = 0.7
+margin_right = 50.0
+margin_bottom = 50.0
+rect_scale = Vector2( 1.5, 1.5 )
+
+[node name="StartGame" type="Button" parent="Control"]
+anchor_left = 0.2
+anchor_top = 0.7
+anchor_right = 1.0
+anchor_bottom = 0.85
+mouse_default_cursor_shape = 2
+custom_fonts/font = ExtResource( 2 )
+text = "Start Game"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Control"]
+anchor_left = -1.0
+anchor_right = 2.0
+margin_right = 40.0
+margin_bottom = 55.0
+custom_fonts/font = SubResource( 1 )
+text = "Treeblocks"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="Control/MusicButton" to="." method="_on_MusicButton_pressed"]
+[connection signal="pressed" from="Control/StartGame" to="." method="_on_Button_pressed"]

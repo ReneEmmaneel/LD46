@@ -30,8 +30,9 @@ func _ready():
 	preview = find_parent("Game").find_node("Preview")
 
 func _process(delta):
-	if Input.is_action_just_pressed("click"):
-		mouse_click()
+	if !global.paused:
+		if Input.is_action_just_pressed("click"):
+			mouse_click()
 
 func mouse_click():
 	var m = get_local_mouse_position()

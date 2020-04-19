@@ -1,0 +1,125 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Menu/TitleScreen.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Fonts/Fredoka_One/FredokaOne.tres" type="DynamicFont" id=2]
+[ext_resource path="res://Fonts/Fredoka_One/FredokaOne-Regular.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://Menu/EndScreen.gd" type="Script" id=4]
+[ext_resource path="res://Menu/TileMap2.gd" type="Script" id=5]
+
+[sub_resource type="DynamicFont" id=1]
+size = 45
+font_data = ExtResource( 3 )
+
+[sub_resource type="Animation" id=4]
+resource_name = "thanks"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Control/Thanks:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "view_label"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("Control/Label2:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "view_time"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("Control/Score:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+
+[node name="EndScreen" instance=ExtResource( 1 )]
+script = ExtResource( 4 )
+
+[node name="ColorRect" parent="." index="0"]
+margin_left = 0.179657
+margin_right = 40.1797
+margin_bottom = 37.7872
+
+[node name="TileMap" parent="." index="1"]
+tile_data = PoolIntArray( 0, 11, 0, 15, 536870923, 0, 65536, 11, 0, 65551, 536870923, 0, 131072, 11, 0, 131087, 536870923, 0, 196608, 11, 0, 196623, 536870923, 0, 262144, 11, 0, 262146, 3, 0, 262156, 536870915, 0, 262159, 536870923, 0, 327680, 11, 0, 327695, 536870923, 0, 393216, 11, 0, 393231, 536870923, 0, 458752, 11, 0, 458767, 536870923, 0, 524288, 11, 0, 524303, 536870923, 0, 589824, 11, 0, 589839, 536870923, 0 )
+script = ExtResource( 5 )
+
+[node name="MusicButton" parent="Control" index="0"]
+margin_left = -1.50739
+margin_top = 3.05176e-05
+margin_right = 48.4926
+
+[node name="StartGame" parent="Control" index="1"]
+text = "Restart"
+
+[node name="Label" parent="Control" index="2"]
+margin_left = 1.36035
+margin_right = 41.3604
+text = "The tree is no longer alive..."
+
+[node name="Label2" type="Label" parent="Control" index="3"]
+anchor_top = 0.2
+anchor_right = 1.0
+anchor_bottom = 0.2
+margin_right = 40.0
+margin_bottom = 14.0
+custom_fonts/font = ExtResource( 2 )
+text = "Total time:"
+align = 1
+
+[node name="Score" type="Label" parent="Control" index="4"]
+anchor_top = 0.25
+anchor_right = 1.0
+anchor_bottom = 0.4
+margin_right = 40.0
+margin_bottom = 14.0
+custom_fonts/font = SubResource( 1 )
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Thanks" type="Label" parent="Control" index="5"]
+visible = false
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.6
+margin_right = 40.0
+margin_bottom = 14.0
+custom_fonts/font = ExtResource( 2 )
+text = "Thanks for playing!"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="3"]
+anims/thanks = SubResource( 4 )
+anims/view_label = SubResource( 2 )
+anims/view_time = SubResource( 3 )
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

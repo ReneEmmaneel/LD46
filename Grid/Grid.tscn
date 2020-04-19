@@ -29,7 +29,7 @@ tile_set = ExtResource( 3 )
 cell_size = Vector2( 32, 32 )
 cell_quadrant_size = 12
 format = 1
-tile_data = PoolIntArray( 327685, 3, 0 )
+tile_data = PoolIntArray( 327684, 2, 0, 327685, 3, 0, 327687, 1, 0, 393220, 2, 0, 393223, 1, 0, 458757, 0, 0, 458758, 0, 0 )
 script = ExtResource( 2 )
 
 [node name="Shadow" type="TileMap" parent="."]

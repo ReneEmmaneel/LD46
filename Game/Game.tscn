@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=35 format=2]
 
 [ext_resource path="res://Grid/Grid.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Game/Game.gd" type="Script" id=2]
@@ -10,56 +10,111 @@
 [ext_resource path="res://tileset/blocks/TileSet.tres" type="TileSet" id=8]
 [ext_resource path="res://tileset/misc/gold.png" type="Texture" id=9]
 [ext_resource path="res://Fonts/Fredoka_One/FredokaOne.tres" type="DynamicFont" id=10]
-[ext_resource path="res://tileset/blocks/NutrionBlock.png" type="Texture" id=11]
-[ext_resource path="res://tileset/blocks/WaterBlock.png" type="Texture" id=12]
+[ext_resource path="res://Fonts/Baloo/Baloo_Bhaina_2/new_dynamicfont.tres" type="DynamicFont" id=11]
+[ext_resource path="res://Sound/storm.wav" type="AudioStream" id=12]
 [ext_resource path="res://Sound/Fire.wav" type="AudioStream" id=13]
+[ext_resource path="res://Sound/famine.wav" type="AudioStream" id=14]
+[ext_resource path="res://MusicButton.tscn" type="PackedScene" id=15]
+[ext_resource path="res://Sound/Place.wav" type="AudioStream" id=16]
+[ext_resource path="res://Sound/error.wav" type="AudioStream" id=17]
+[ext_resource path="res://Game/Popups/Popup1.tscn" type="PackedScene" id=18]
+[ext_resource path="res://Fonts/Fredoka_One/FredokaOneBig.tres" type="DynamicFont" id=19]
+[ext_resource path="res://MusicButton.gd" type="Script" id=20]
+[ext_resource path="res://Game/Popups/Popup2.tscn" type="PackedScene" id=21]
+[ext_resource path="res://Game/Popups/Popup3.tscn" type="PackedScene" id=22]
+[ext_resource path="res://Game/Popups/Popup5.tscn" type="PackedScene" id=23]
+[ext_resource path="res://Game/Popups/Popup4.tscn" type="PackedScene" id=24]
+[ext_resource path="res://Popup6.tscn" type="PackedScene" id=25]
+[ext_resource path="res://Sound/Alarm.wav" type="AudioStream" id=26]
 
 [sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.286275, 0.654902, 0.0470588, 1 )
+bg_color = Color( 0.129412, 0.737255, 0.0156863, 1 )
 
 [sub_resource type="DynamicFont" id=2]
 font_data = ExtResource( 4 )
 
-[sub_resource type="StyleBoxFlat" id=3]
-bg_color = Color( 0.0627451, 0.231373, 0.894118, 1 )
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="Animation" id=5]
+resource_name = "alarm"
+length = 0.6
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:custom_styles/fg")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 5.46416 ),
+"update": 1,
+"values": [ SubResource( 1 ), SubResource( 4 ), SubResource( 1 ) ]
+}
+
+[sub_resource type="StyleBoxFlat" id=8]
+bg_color = Color( 0.164706, 0.0588235, 0.909804, 1 )
+
+[sub_resource type="StyleBoxFlat" id=6]
+bg_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=9]
+bg_color = Color( 0.164706, 0.0588235, 0.909804, 1 )
+
+[sub_resource type="Animation" id=7]
+resource_name = "drought"
+length = 0.6
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:custom_styles/fg")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1.56917 ),
+"update": 1,
+"values": [ SubResource( 8 ), SubResource( 6 ), SubResource( 9 ) ]
+}
 
 [node name="Game" type="Node2D"]
 script = ExtResource( 2 )
 
 [node name="Grid" parent="." instance=ExtResource( 1 )]
-position = Vector2( 16, 126 )
+position = Vector2( 16, 150 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( -32, -16 )
 anchor_mode = 0
 current = true
-zoom = Vector2( 0.9, 0.9 )
 
 [node name="PickTile" parent="." instance=ExtResource( 3 )]
-position = Vector2( 402.234, 367.919 )
+position = Vector2( 435, 383 )
 
 [node name="Upperbar" type="ColorRect" parent="."]
-margin_left = 10.0
+margin_left = 16.0
 margin_top = 15.0
-margin_right = 918.0
+margin_right = 947.0
 margin_bottom = 120.0
-color = Color( 1, 1, 1, 0.145098 )
+color = Color( 1, 1, 1, 0 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Money" type="ColorRect" parent="Upperbar"]
-visible = false
-margin_right = 119.0
-margin_bottom = 120.0
+[node name="Bars" type="Control" parent="Upperbar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 105.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="NutritionProgressBar" type="ProgressBar" parent="Upperbar"]
-margin_left = 135.0
-margin_top = 7.0
-margin_right = 903.0
-margin_bottom = 47.0
+[node name="NutritionProgressBar" type="ProgressBar" parent="Upperbar/Bars"]
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_bottom = -5.0
 custom_styles/fg = SubResource( 1 )
 step = 1.0
 value = 50.0
@@ -69,10 +124,21 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="Upperbar/NutritionProgressBar"]
-margin_left = 2.0
-margin_right = 768.0
-margin_bottom = 39.0
+[node name="NutritionLabel" type="Label" parent="Upperbar/Bars/NutritionProgressBar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 20.0
+custom_fonts/font = ExtResource( 10 )
+text = "Nutrition used -4/sec"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Upperbar/Bars/NutritionProgressBar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -20.0
 rect_pivot_offset = Vector2( 398.141, 22.5 )
 custom_fonts/font = SubResource( 2 )
 text = "500/ 2000"
@@ -82,10 +148,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Name" type="Label" parent="Upperbar/NutritionProgressBar"]
-margin_left = 2.0
-margin_right = 765.0
-margin_bottom = 46.0
+[node name="Name" type="Label" parent="Upperbar/Bars/NutritionProgressBar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 rect_pivot_offset = Vector2( 398.141, 22.5 )
 custom_fonts/font = SubResource( 2 )
 text = "Food"
@@ -95,12 +160,15 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="WaterProgressBar" type="ProgressBar" parent="Upperbar"]
-margin_left = 135.0
-margin_top = 57.0
-margin_right = 902.0
-margin_bottom = 97.0
-custom_styles/fg = SubResource( 3 )
+[node name="NutrAnim" type="AnimationPlayer" parent="Upperbar/Bars/NutritionProgressBar"]
+anims/alarm = SubResource( 5 )
+
+[node name="WaterProgressBar" type="ProgressBar" parent="Upperbar/Bars"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 5.0
+custom_styles/fg = SubResource( 8 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 step = 1.0
 value = 50.0
@@ -111,9 +179,21 @@ __meta__ = {
 "_editor_description_": ""
 }
 
-[node name="Label" type="Label" parent="Upperbar/WaterProgressBar"]
-margin_right = 763.0
-margin_bottom = 37.0
+[node name="WaterLabel" type="Label" parent="Upperbar/Bars/WaterProgressBar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 20.0
+custom_fonts/font = ExtResource( 10 )
+text = "Water used -4/sec"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Upperbar/Bars/WaterProgressBar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -20.0
 rect_pivot_offset = Vector2( 398.141, 22.5 )
 custom_fonts/font = SubResource( 2 )
 text = "500/ 2000"
@@ -123,9 +203,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Name" type="Label" parent="Upperbar/WaterProgressBar"]
-margin_right = 762.0
-margin_bottom = 45.0
+[node name="Name" type="Label" parent="Upperbar/Bars/WaterProgressBar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 0.463287
+margin_top = -0.463303
+margin_right = 0.463257
+margin_bottom = -0.463303
 rect_pivot_offset = Vector2( 398.141, 22.5 )
 custom_fonts/font = SubResource( 2 )
 text = "Water"
@@ -135,19 +219,46 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="WaterAnim" type="AnimationPlayer" parent="Upperbar/Bars/WaterProgressBar"]
+anims/drought = SubResource( 7 )
+
 [node name="Preview" type="TileMap" parent="Upperbar"]
+visible = false
 position = Vector2( 17.1649, 10.1229 )
 tile_set = ExtResource( 8 )
 cell_size = Vector2( 32, 32 )
 format = 1
 script = ExtResource( 7 )
 
+[node name="MenuButton" type="Control" parent="Upperbar"]
+anchor_bottom = 1.0
+margin_right = 105.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Time" type="Label" parent="Upperbar/MenuButton"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 5.0
+custom_fonts/font = ExtResource( 19 )
+text = "00:00"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureButton" parent="Upperbar/MenuButton" instance=ExtResource( 15 )]
+texture_disabled = null
+script = ExtResource( 20 )
+
 [node name="Info" type="ColorRect" parent="."]
-margin_left = 403.0
-margin_top = 121.0
-margin_right = 923.0
-margin_bottom = 309.0
-color = Color( 1, 1, 1, 0.145098 )
+margin_left = 435.0
+margin_top = 145.0
+margin_right = 955.0
+margin_bottom = 333.0
+color = Color( 1, 1, 1, 0 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -168,14 +279,15 @@ __meta__ = {
 }
 
 [node name="GoldSprite" type="Sprite" parent="Info/col1/Gold"]
-position = Vector2( 16, 16 )
+position = Vector2( 172.757, 5.85736 )
 scale = Vector2( 2, 2 )
 texture = ExtResource( 9 )
 
 [node name="GoldLabel" type="Label" parent="Info/col1/Gold"]
-margin_left = 32.0
-margin_right = 208.0
-margin_bottom = 32.0
+margin_left = 180.182
+margin_top = -7.0
+margin_right = 356.182
+margin_bottom = 25.0
 custom_fonts/font = ExtResource( 10 )
 text = "Gold 1000 (10/sec)"
 align = 1
@@ -186,23 +298,7 @@ __meta__ = {
 
 [node name="Nutrition" type="ReferenceRect" parent="Info/col1"]
 margin_top = 60.0
-margin_bottom = 50.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="NutritionSprite" type="Sprite" parent="Info/col1/Nutrition"]
-position = Vector2( 16, 16 )
-texture = ExtResource( 11 )
-
-[node name="NutritionLabel" type="Label" parent="Info/col1/Nutrition"]
-margin_left = 32.0
-margin_right = 208.0
-margin_bottom = 32.0
-custom_fonts/font = ExtResource( 10 )
-text = "Nutrition used -4/sec"
-align = 1
-valign = 1
+margin_bottom = 60.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -216,71 +312,55 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="WaterSprite" type="Sprite" parent="Info/col1/Water"]
-position = Vector2( 16, 16 )
-texture = ExtResource( 12 )
-
-[node name="WaterLabel" type="Label" parent="Info/col1/Water"]
-margin_left = 32.0
-margin_right = 208.0
-margin_bottom = 32.0
-custom_fonts/font = ExtResource( 10 )
-text = "Water used -4/sec"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="col2" type="ReferenceRect" parent="Info"]
-margin_left = 260.0
-margin_top = 4.0
-margin_right = 513.0
-margin_bottom = 178.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="HBoxContainer" type="VBoxContainer" parent="Info/col2"]
-margin_left = -26.0
-margin_top = -1.0
-margin_right = 257.0
-margin_bottom = 180.0
+[node name="HBoxContainer" type="VBoxContainer" parent="Info"]
+margin_left = 2.0
+margin_top = 45.0
+margin_right = 514.0
+margin_bottom = 170.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button" type="Button" parent="Info/col2/HBoxContainer"]
-margin_right = 283.0
-margin_bottom = 57.0
+[node name="Button" type="Button" parent="Info/HBoxContainer"]
+margin_right = 512.0
+margin_bottom = 39.0
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_fonts/font = ExtResource( 10 )
+custom_fonts/font = ExtResource( 11 )
 text = "Delete 3x3 | Cost 300 Gold"
 
-[node name="Button2" type="Button" parent="Info/col2/HBoxContainer"]
-margin_top = 61.0
-margin_right = 283.0
-margin_bottom = 118.0
+[node name="Button2" type="Button" parent="Info/HBoxContainer"]
+margin_top = 43.0
+margin_right = 512.0
+margin_bottom = 82.0
+mouse_default_cursor_shape = 2
 size_flags_vertical = 3
-custom_fonts/font = ExtResource( 10 )
+custom_fonts/font = ExtResource( 11 )
 text = "Add 1 Food source | Cost 500 Gold"
 
-[node name="Button3" type="Button" parent="Info/col2/HBoxContainer"]
-margin_top = 122.0
-margin_right = 283.0
-margin_bottom = 181.0
+[node name="Button3" type="Button" parent="Info/HBoxContainer"]
+margin_top = 86.0
+margin_right = 512.0
+margin_bottom = 125.0
+mouse_default_cursor_shape = 2
 size_flags_vertical = 3
-custom_fonts/font = ExtResource( 10 )
-text = "Add 1 Water source | Cost 500 Gold"
+custom_fonts/font = ExtResource( 11 )
+text = "Add 1 Water tile | Cost 500 Gold"
+
+[node name="Button4" type="Button" parent="Info/HBoxContainer"]
+visible = false
+margin_top = 129.0
+margin_right = 512.0
+margin_bottom = 149.0
 
 [node name="DisasterBar" type="ProgressBar" parent="."]
-margin_left = 404.45
-margin_top = 317.221
-margin_right = 921.45
-margin_bottom = 363.221
+margin_left = 435.0
+margin_top = 322.221
+margin_right = 952.0
+margin_bottom = 368.221
 hint_tooltip = "Fire destroys a random 3 wide row or column"
 step = 0.05
 percent_visible = false
@@ -308,6 +388,80 @@ __meta__ = {
 
 [node name="FireSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 13 )
-[connection signal="pressed" from="Info/col2/HBoxContainer/Button" to="." method="_on_Button_pressed"]
-[connection signal="pressed" from="Info/col2/HBoxContainer/Button2" to="." method="_on_Button2_pressed"]
-[connection signal="pressed" from="Info/col2/HBoxContainer/Button3" to="." method="_on_Button3_pressed"]
+volume_db = -5.0
+
+[node name="StormSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 12 )
+volume_db = -8.0
+
+[node name="Famine" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 14 )
+volume_db = -7.0
+
+[node name="Place" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 16 )
+
+[node name="Error" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 17 )
+
+[node name="Popup1" parent="." instance=ExtResource( 18 )]
+margin_left = 117.863
+margin_top = -22.0992
+margin_right = 648.863
+margin_bottom = 221.901
+text = "Hi there! We need you to keep this lovely tree healthy."
+
+[node name="Popup2" parent="." instance=ExtResource( 21 )]
+visible = true
+margin_left = 137.048
+margin_top = 25.0394
+margin_right = 798.048
+margin_bottom = 319.039
+right = true
+text = "You can do that by selecting one of the following tiles and placing it beside the tree. Every tile in a link of their own type that connects to the tree will generate food, water or gold."
+
+[node name="Popup3" parent="." instance=ExtResource( 22 )]
+margin_left = 430.936
+margin_top = 112.952
+margin_right = 961.936
+margin_bottom = 356.952
+arrow = false
+text = "Once you placed all 3 tiles you will redraw new ones. Or you can spend 250 gold to redraw instantly."
+
+[node name="Popup4" parent="." instance=ExtResource( 24 )]
+margin_left = 216.082
+margin_top = 9.8219
+margin_right = 747.082
+margin_bottom = 253.822
+right = true
+text = "Be aware of disasters! These can destroy blocks or criple your food or water generation. "
+
+[node name="Popup5" parent="." instance=ExtResource( 23 )]
+margin_left = 212.399
+margin_top = 151.012
+margin_right = 743.399
+margin_bottom = 395.012
+arrow = false
+text = "Food and water is consumed by the tree. If you run out you lose. Over time the tree will require more, so try to keep up."
+
+[node name="Popup6" parent="." instance=ExtResource( 25 )]
+visible = true
+margin_left = 169.428
+margin_top = 13.5051
+margin_right = 700.428
+margin_bottom = 257.505
+arrow = false
+text = "Also, you can rotate with 'R'\\\\Good luck!"
+big = true
+
+[node name="Alarm" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 26 )
+volume_db = -15.0
+[connection signal="pressed" from="Upperbar/MenuButton/TextureButton" to="." method="_on_TextureButton_pressed"]
+[connection signal="pressed" from="Upperbar/MenuButton/TextureButton" to="Upperbar/MenuButton/TextureButton" method="_on_TextureButton_pressed"]
+[connection signal="toggled" from="Upperbar/MenuButton/TextureButton" to="." method="_on_TextureButton_toggled"]
+[connection signal="button_down" from="Info/HBoxContainer/Button" to="." method="_on_Button_button_down"]
+[connection signal="pressed" from="Info/HBoxContainer/Button" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="Info/HBoxContainer/Button2" to="." method="_on_Button2_pressed"]
+[connection signal="pressed" from="Info/HBoxContainer/Button3" to="." method="_on_Button3_pressed"]
+[connection signal="pressed" from="Info/HBoxContainer/Button4" to="." method="_on_Button4_pressed"]
