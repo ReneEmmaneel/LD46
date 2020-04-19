@@ -10,7 +10,7 @@
 size = 45
 font_data = ExtResource( 3 )
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=2]
 resource_name = "thanks"
 tracks/0/type = "value"
 tracks/0/path = NodePath("Control/Thanks:visible")
@@ -25,8 +25,7 @@ tracks/0/keys = {
 "values": [ false, true ]
 }
 
-[sub_resource type="Animation" id=2]
-resource_name = "view_label"
+[sub_resource type="Animation" id=3]
 length = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath("Control/Label2:visible")
@@ -41,8 +40,7 @@ tracks/0/keys = {
 "values": [ false, true ]
 }
 
-[sub_resource type="Animation" id=3]
-resource_name = "view_time"
+[sub_resource type="Animation" id=4]
 length = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath("Control/Score:visible")
@@ -66,7 +64,6 @@ margin_right = 40.1797
 margin_bottom = 37.7872
 
 [node name="TileMap" parent="." index="1"]
-tile_data = PoolIntArray( 0, 11, 0, 15, 536870923, 0, 65536, 11, 0, 65551, 536870923, 0, 131072, 11, 0, 131087, 536870923, 0, 196608, 11, 0, 196623, 536870923, 0, 262144, 11, 0, 262146, 3, 0, 262156, 536870915, 0, 262159, 536870923, 0, 327680, 11, 0, 327695, 536870923, 0, 393216, 11, 0, 393231, 536870923, 0, 458752, 11, 0, 458767, 536870923, 0, 524288, 11, 0, 524303, 536870923, 0, 589824, 11, 0, 589839, 536870923, 0 )
 script = ExtResource( 5 )
 
 [node name="MusicButton" parent="Control" index="0"]
@@ -119,7 +116,7 @@ __meta__ = {
 }
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="3"]
-anims/thanks = SubResource( 4 )
-anims/view_label = SubResource( 2 )
-anims/view_time = SubResource( 3 )
+anims/thanks = SubResource( 2 )
+anims/view_label = SubResource( 3 )
+anims/view_time = SubResource( 4 )
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

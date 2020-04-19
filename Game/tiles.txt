@@ -10,25 +10,29 @@ xxx
 RRx
 xRR
 
-1xx
+Rxx
 xRx
-xx1
+xxR
 
-11x
-122
+xxx
+x21
+x11
+
+xxx
+x12
 x22
 
-001
-001
+xx1
+xx1
 111
-
-002
-002
-222
 
 xxx
 xRx
-xRx
+xxx
+
+xxx
+RxR
+xxx
 
 xxx
 xRR

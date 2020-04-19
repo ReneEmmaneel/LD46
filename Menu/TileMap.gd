@@ -3,7 +3,7 @@ extends TileMap
 var height = 20
 var width = 1000
 var h1 = 4
-var w1 = 5
+var w1 = -3
 var wb = 6
 
 var fire = false

@@ -287,6 +287,7 @@ func _process(delta):
 	find_node("Button").disabled = data.gold < 300
 	find_node("Button2").disabled = data.gold < 500
 	find_node("Button3").disabled = data.gold < 500
+	find_node("Button4").disabled = data.gold < 1000
 
 
 func _input(event):
@@ -338,7 +339,7 @@ func start_game():
 var tutorial_list
 
 func tutorial():
-	tutorial_list = [$Popup1, $Popup2, $Popup3, $Popup5, $Popup4, $Popup6]
+	tutorial_list = [$Popup1, $Popup2, $Popupp, $Popup5, $Popup4, $Popup3, $Popup6]
 	global.paused = true
 	if global.first_time:
 		popup_gone()
@@ -376,5 +377,16 @@ func _on_Button3_pressed():
 		data.gold -= 500
 		add_single_tile("res://Game/water.txt", 500)
 
+func _on_Button4_pressed():
+	if data.gold >= 1000:
+		data.gold -= 1000
+		data.nutrition += 500
+		if data.nutrition >= data.nutrition_max:
+			data.nutrition = data.nutrition_max
+		data.water += 500
+		if data.water >= data.water_max:
+			data.water = data.water_max
+
 func _on_TextureButton_pressed():
 	global.toggle_music()
+

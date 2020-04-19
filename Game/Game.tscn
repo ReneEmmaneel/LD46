@@ -10,7 +10,7 @@
 [ext_resource path="res://tileset/blocks/TileSet.tres" type="TileSet" id=8]
 [ext_resource path="res://tileset/misc/gold.png" type="Texture" id=9]
 [ext_resource path="res://Fonts/Fredoka_One/FredokaOne.tres" type="DynamicFont" id=10]
-[ext_resource path="res://Fonts/Baloo/Baloo_Bhaina_2/new_dynamicfont.tres" type="DynamicFont" id=11]
+[ext_resource path="res://Game/Popups/Popupp.tscn" type="PackedScene" id=11]
 [ext_resource path="res://Sound/storm.wav" type="AudioStream" id=12]
 [ext_resource path="res://Sound/Fire.wav" type="AudioStream" id=13]
 [ext_resource path="res://Sound/famine.wav" type="AudioStream" id=14]
@@ -33,10 +33,10 @@ bg_color = Color( 0.129412, 0.737255, 0.0156863, 1 )
 [sub_resource type="DynamicFont" id=2]
 font_data = ExtResource( 4 )
 
-[sub_resource type="StyleBoxFlat" id=4]
+[sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0, 0, 0, 1 )
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=4]
 resource_name = "alarm"
 length = 0.6
 loop = true
@@ -50,20 +50,19 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.3, 0.6 ),
 "transitions": PoolRealArray( 1, 1, 5.46416 ),
 "update": 1,
-"values": [ SubResource( 1 ), SubResource( 4 ), SubResource( 1 ) ]
+"values": [ SubResource( 1 ), SubResource( 3 ), SubResource( 1 ) ]
 }
 
-[sub_resource type="StyleBoxFlat" id=8]
+[sub_resource type="StyleBoxFlat" id=5]
 bg_color = Color( 0.164706, 0.0588235, 0.909804, 1 )
 
 [sub_resource type="StyleBoxFlat" id=6]
 bg_color = Color( 0, 0, 0, 1 )
 
-[sub_resource type="StyleBoxFlat" id=9]
+[sub_resource type="StyleBoxFlat" id=7]
 bg_color = Color( 0.164706, 0.0588235, 0.909804, 1 )
 
-[sub_resource type="Animation" id=7]
-resource_name = "drought"
+[sub_resource type="Animation" id=8]
 length = 0.6
 loop = true
 tracks/0/type = "value"
@@ -76,7 +75,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.3, 0.6 ),
 "transitions": PoolRealArray( 1, 1, 1.56917 ),
 "update": 1,
-"values": [ SubResource( 8 ), SubResource( 6 ), SubResource( 9 ) ]
+"values": [ SubResource( 5 ), SubResource( 6 ), SubResource( 7 ) ]
 }
 
 [node name="Game" type="Node2D"]
@@ -161,14 +160,14 @@ __meta__ = {
 }
 
 [node name="NutrAnim" type="AnimationPlayer" parent="Upperbar/Bars/NutritionProgressBar"]
-anims/alarm = SubResource( 5 )
+anims/alarm = SubResource( 4 )
 
 [node name="WaterProgressBar" type="ProgressBar" parent="Upperbar/Bars"]
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 5.0
-custom_styles/fg = SubResource( 8 )
+custom_styles/fg = SubResource( 5 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 step = 1.0
 value = 50.0
@@ -220,7 +219,7 @@ __meta__ = {
 }
 
 [node name="WaterAnim" type="AnimationPlayer" parent="Upperbar/Bars/WaterProgressBar"]
-anims/drought = SubResource( 7 )
+anims/drought = SubResource( 8 )
 
 [node name="Preview" type="TileMap" parent="Upperbar"]
 visible = false
@@ -316,7 +315,7 @@ __meta__ = {
 margin_left = 2.0
 margin_top = 45.0
 margin_right = 514.0
-margin_bottom = 170.0
+margin_bottom = 171.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
@@ -325,36 +324,43 @@ __meta__ = {
 
 [node name="Button" type="Button" parent="Info/HBoxContainer"]
 margin_right = 512.0
-margin_bottom = 39.0
+margin_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_fonts/font = ExtResource( 11 )
 text = "Delete 3x3 | Cost 300 Gold"
 
 [node name="Button2" type="Button" parent="Info/HBoxContainer"]
-margin_top = 43.0
+margin_top = 32.0
 margin_right = 512.0
-margin_bottom = 82.0
+margin_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_default_cursor_shape = 2
 size_flags_vertical = 3
-custom_fonts/font = ExtResource( 11 )
 text = "Add 1 Food source | Cost 500 Gold"
 
 [node name="Button3" type="Button" parent="Info/HBoxContainer"]
-margin_top = 86.0
+margin_top = 64.0
 margin_right = 512.0
-margin_bottom = 125.0
+margin_bottom = 92.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_default_cursor_shape = 2
 size_flags_vertical = 3
-custom_fonts/font = ExtResource( 11 )
 text = "Add 1 Water tile | Cost 500 Gold"
 
 [node name="Button4" type="Button" parent="Info/HBoxContainer"]
-visible = false
-margin_top = 129.0
+margin_top = 96.0
 margin_right = 512.0
-margin_bottom = 149.0
+margin_bottom = 126.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_default_cursor_shape = 2
+size_flags_vertical = 3
+text = "Gain 500 gold and 500 water | Cost 1000 Gold"
 
 [node name="DisasterBar" type="ProgressBar" parent="."]
 margin_left = 435.0
@@ -412,13 +418,20 @@ margin_bottom = 221.901
 text = "Hi there! We need you to keep this lovely tree healthy."
 
 [node name="Popup2" parent="." instance=ExtResource( 21 )]
-visible = true
 margin_left = 137.048
 margin_top = 25.0394
 margin_right = 798.048
 margin_bottom = 319.039
 right = true
-text = "You can do that by selecting one of the following tiles and placing it beside the tree. Every tile in a link of their own type that connects to the tree will generate food, water or gold."
+text = "You can do that by selecting one of the following tiles and placing it on the grid."
+
+[node name="Popupp" parent="." instance=ExtResource( 11 )]
+visible = true
+margin_left = 104.534
+margin_top = 11.4557
+margin_right = 635.534
+margin_bottom = 255.456
+text = "Tiles connected to the tree or connected through other tiles of the same type will generate water, gold or food."
 
 [node name="Popup3" parent="." instance=ExtResource( 22 )]
 margin_left = 430.936
@@ -445,16 +458,16 @@ arrow = false
 text = "Food and water is consumed by the tree. If you run out you lose. Over time the tree will require more, so try to keep up."
 
 [node name="Popup6" parent="." instance=ExtResource( 25 )]
-visible = true
 margin_left = 169.428
 margin_top = 13.5051
 margin_right = 700.428
 margin_bottom = 257.505
 arrow = false
-text = "Also, you can rotate with 'R'\\\\Good luck!"
+text = "Also, you can rotate tiles with 'R'\\\\Good luck!"
 big = true
 
 [node name="Alarm" type="AudioStreamPlayer2D" parent="."]
+visible = false
 stream = ExtResource( 26 )
 volume_db = -15.0
 [connection signal="pressed" from="Upperbar/MenuButton/TextureButton" to="." method="_on_TextureButton_pressed"]

@@ -1,16 +1,26 @@
 extends TileMap
 
+var w1 = 2
+var w2 = 7
+var w3 = 13
+var h = 2
+var hbetw = 3
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
+func rand():
+	return randi() % 5 - 2
 
+func generate(start):
+	for i in range(500):
+		set_cellv(Vector2(w1 + rand(), start + h + hbetw * i + rand()), global.Blocks.TREE, randi() %2, randi() %2)
+		set_cellv(Vector2(w2 + rand(), start + h + hbetw * i + rand()), global.Blocks.TREE, randi() %2, randi() %2)
+		set_cellv(Vector2(w3 + rand(), start + h + hbetw * i + rand()), global.Blocks.TREE, randi() %2, randi() %2)
 
-# Called when the node enters the scene tree for the first time.
+var speed = 100
+func _process(delta):
+	position.y -= delta * speed
+	if position.y < -32 * 100:
+		position.y = 0
+
 func _ready():
-	pass # Replace with function body.
+	generate(0)
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
