@@ -17,7 +17,6 @@ func _process(delta):
 
 func mouse_click():
 	var m = get_local_mouse_position()
-	print(m)
 	var size = 32
 	if m.x >= 0 and m.x < size and m.y >= 0 and m.y < size:
 		find_parent("Game").redraw()

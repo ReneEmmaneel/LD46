@@ -64,6 +64,7 @@ margin_right = 40.1797
 margin_bottom = 37.7872
 
 [node name="TileMap" parent="." index="1"]
+tile_data = PoolIntArray( 327707, 3, 0 )
 script = ExtResource( 5 )
 
 [node name="MusicButton" parent="Control" index="0"]

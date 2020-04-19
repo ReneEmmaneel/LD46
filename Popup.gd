@@ -15,7 +15,6 @@ func _ready():
 	if !right:
 		get_node("ColorRect/Arrow").anchor_left = 0.1
 	text = text.replace("\\","\n")
-	print(text)
 	get_node("ColorRect/ColorRect/Label").set_text(text)
 	if !arrow:
 		find_node("Sprite").visible = false

@@ -32,14 +32,16 @@ func get_rotated(org, center):
 	return new
 
 func _ready():
-	print("read")
+	pass
 
 func toggle_music():
 	if music_playing:
 		music_playing = false
 		$Music.stream_paused = true
+		AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), true)
 		return false
 	else:
 		global.music_playing = true
 		$Music.stream_paused = false
+		AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), false)
 		return true

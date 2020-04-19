@@ -11,12 +11,14 @@ func show_score(delta):
 			curr = finished
 			start = false
 			$AnimationPlayer.play("thanks")
+			find_node("StartGame").disabled = false
 		var n = find_node("Score")
 		if n:
 			n.set_text("%01.0d:%02.0d" % [int(global.time * curr / finished / 60), int(global.time * curr / finished) % 60])
 
 func _ready():
 	$AnimationPlayer.play("view_label")
+	find_node("StartGame").disabled = true
 
 func _process(delta):
 	show_score(delta)

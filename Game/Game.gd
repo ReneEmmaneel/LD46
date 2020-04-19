@@ -38,9 +38,6 @@ func _ready():
 func load_text_file(path):
 	var f = File.new()
 	var err = f.open(path, File.READ)
-	if err != OK:
-		printerr("Could not open file, error code ", err)
-		return ""
 	var text = f.get_as_text()
 	f.close()
 	return text
@@ -57,7 +54,7 @@ class Data:
 	var water = 500
 	var water_max = 1000
 	var water_per_block = 1
-	var water_used = -15
+	var water_used = -10
 	var water_use_increase_curr = 00
 	var water_use_increase_time = 15
 	var water_ps
@@ -81,7 +78,7 @@ class Data:
 	var nutrition = 500
 	var nutrition_max = 1000
 	var nutrition_per_block = 1
-	var nutrition_used = -15
+	var nutrition_used = -10
 	var nutrition_use_increase_curr = 0
 	var nutrition_use_increase_time = 15
 	var nutrition_ps
@@ -103,7 +100,7 @@ class Data:
 			nutrition_used -= 1
 
 	## GOLD
-	var gold = 0 #TODO REMOVE
+	var gold = 250
 	var gold_per_block = 1
 	var gold_ps
 	
@@ -302,11 +299,6 @@ func _input(event):
 			global.rotate()
 		elif event.is_action_pressed("q"):
 			redraw()
-		elif event.is_action_pressed("p"):#debug
-			if OS.is_debug_build():
-				data.water -= 100
-				data.nutrition -= 100
-				data.disaster_progress += 100
 
 func update_disaster_name():
 	var name
@@ -345,7 +337,6 @@ func tutorial():
 		popup_gone()
 
 func popup_gone():
-	print(global.paused)
 	if tutorial_list.size() > 0:
 		tutorial_list[0].popup()
 		tutorial_list.remove(0)
