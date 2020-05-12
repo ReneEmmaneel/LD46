@@ -19,6 +19,7 @@ func show_score(delta):
 func _ready():
 	$AnimationPlayer.play("view_label")
 	find_node("StartGame").disabled = true
+	JavaScript.eval("kongregate.stats.submit('Time', " + str(global.time) + ")")
 
 func _process(delta):
 	show_score(delta)

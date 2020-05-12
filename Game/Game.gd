@@ -36,10 +36,28 @@ func _ready():
 
 
 func load_text_file(path):
-	var f = File.new()
-	var err = f.open(path, File.READ)
-	var text = f.get_as_text()
-	f.close()
+	var kongregate = true
+	var text = ""
+	if !kongregate:
+		var f = File.new()
+		var err = f.open(path, File.READ)
+		text = f.get_as_text()
+		f.close()
+		print(path)
+		print(text)
+	else:
+		if path == "res://Game/tiles.txt":
+			text = "xxx\nxRR\nxRR\n\nxxx\n111\n222\n\nxxx\nRRx\nxRR\n\nRxx\nxRx\nxxR\n\nxxx\nx21\nx11\n\nxxx\nx12\nx22\n\nxx1\n111"
+			text += "\n\nxxx\nxRx\nxxx\n\nxxx\nRxR\nxxx\n\nxxx\nxRR\nxRx\n\nxxx\nxRx\nRxR\n"
+		elif path == "res://Game/empty.txt":
+			text = "999\n999\n999\n"
+		elif path == "res://Game/food.txt":
+			text = "xxx\nx1x\nxxx\n"
+		elif path == "res://Game/water.txt":
+			text = "xxx\nx2x\nxxx\n"
+		else:
+			print(path)
+
 	return text
 
 ###GAME LOGIC####
